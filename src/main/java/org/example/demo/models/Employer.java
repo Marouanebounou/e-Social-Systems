@@ -16,10 +16,10 @@ public class Employer {
     @Column(name = "secteur_activite")
     private String secteur_activite;
 
-    @OneToMany(mappedBy = "employer" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employer" , cascade = {CascadeType.MERGE , CascadeType.PERSIST} , fetch = FetchType.LAZY)
     private List<Assure> assures;
 
-    @OneToMany(mappedBy = "employer" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employer" , cascade = {CascadeType.PERSIST , CascadeType.MERGE} , fetch = FetchType.LAZY)
     private List<Declaration> declarations;
 
     public Employer(long id, String raison_social, String secteur_activite, List<Assure> assures, List<Declaration> declarations) {
