@@ -20,6 +20,6 @@ public class Main {
         System.out.println("Employer saved successfully!");
 
         // Close the factory when done
-        JPAUtil.shutDown();
+        JPAUtil.close();
     }
 }
