@@ -16,15 +16,12 @@ public class AssureService {
         employerDao = new EmployerDao();
     }
 
-    public void ajouterAssure(String nom, double salaireMensuel, Long employeurId){
-        Employer employer = employerDao.findById(employeurId);
+    public List<Assure> listerAssures() {
+        return assureDAO.findAll();
+    }
 
-        if (employer != null){
-            Assure assure = new Assure();
-            assure.setName(nom);
-            assure.setSalaireMensuel(salaireMensuel);
-            assure.setEmployer(employer);
-
+    public void ajouterAssure(Assure assure){
+        if (assure != null){
             assureDAO.save(assure);
         }else {
             System.err.println("Erreur : Employeur introuvable !");
@@ -35,6 +32,10 @@ public class AssureService {
         if (salaire > 0){
             assureDAO.update(id , salaire);
         }
+    }
+
+    public List<Assure> consulterAssuresParEmployeur(Long employeurId) {
+        return assureDAO.getByEmployeur(employeurId);
     }
 
     public List<Assure> listerAssuresParEmployeur(long id){

@@ -2,6 +2,7 @@ package org.example.demo.DAO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 import org.example.demo.models.Assure;
 import org.example.demo.models.Cotisation;
 import org.example.demo.models.Declaration;
@@ -44,6 +45,22 @@ public class DeclarationDAO {
                     .setParameter("id" , id)
                     .getResultList();
         }finally {
+            em.close();
+        }
+    }
+
+    public boolean isUnique(Long employeurId, int mois, int annee) {
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            TypedQuery<Long> query = em.createQuery(
+                    "SELECT COUNT(d) FROM Declaration d WHERE d.employer.id = :empId AND d.mois = :mois AND d.annee = :annee", Long.class);
+            query.setParameter("empId", employeurId);
+            query.setParameter("mois", mois);
+            query.setParameter("annee", annee);
+
+            Long count = query.getSingleResult();
+            return count == 0;
+        } finally {
             em.close();
         }
     }

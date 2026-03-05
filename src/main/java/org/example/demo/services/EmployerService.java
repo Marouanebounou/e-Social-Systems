@@ -19,6 +19,10 @@ public class EmployerService {
         employerDao.save(employer);
     }
 
+    public Employer consulterEmployeur(Long id) {
+        return employerDao.findById(id);
+    }
+
     public List<Employer> listerEmployeurs(){
         return employerDao.findAll();
     }

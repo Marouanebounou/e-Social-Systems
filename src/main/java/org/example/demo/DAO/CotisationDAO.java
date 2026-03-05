@@ -2,6 +2,7 @@ package org.example.demo.DAO;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 import org.example.demo.models.Assure;
 import org.example.demo.models.Cotisation;
 import org.example.demo.models.Declaration;
@@ -72,6 +73,35 @@ public class CotisationDAO {
         EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
         try {
             return em.find(Cotisation.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    public double sumCotisations(Long assureId) {
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            TypedQuery<Double> query = em.createQuery(
+                    "SELECT SUM(c.salaireDeclare) FROM Cotisation c WHERE c.assure.id = :assureId", Double.class);
+            query.setParameter("assureId", assureId);
+
+            Double total = query.getSingleResult();
+
+            return total != null ? total : 0.0;
+        } finally {
+            em.close();
+        }
+    }
+
+
+    public long countMoisDeclares(Long assureId) {
+        EntityManager em = JPAUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            TypedQuery<Long> query = em.createQuery(
+                    "SELECT COUNT(c) FROM Cotisation c WHERE c.assure.id = :assureId", Long.class);
+            query.setParameter("assureId", assureId);
+
+            return query.getSingleResult();
         } finally {
             em.close();
         }
